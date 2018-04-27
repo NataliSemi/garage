@@ -31,7 +31,7 @@ class CarBrand(models.Model):
     model = models.CharField(max_length=50)
 
     class Meta:
-        unique_together = ('manufacture', 'model')
+        unique_together = ('manufacturer', 'model')
 
 
 class Car(models.Model):
