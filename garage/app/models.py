@@ -25,6 +25,12 @@ class Address(models.Model):
 class Manufacturer(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
+    def __unicode__(self):
+        return self.name
+
+    def __str__(self):
+        return self.__unicode__()
+
 
 class CarBrand(models.Model):
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE)
@@ -58,7 +64,7 @@ class Box(models.Model):
 
 
 class Customer(models.Model):
-    fist_name = models.CharField(max_length=50, verbose_name="first name of customer")
+    first_name = models.CharField(max_length=50, verbose_name="first name of customer")
     last_name = models.CharField(max_length=50, verbose_name="last name of customer")
     second_name = models.CharField(max_length=50, verbose_name="second name of customer")
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
