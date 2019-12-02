@@ -1,3 +1,5 @@
+import django.core.exceptions
+
 from . import models
 from rest_framework import serializers
 
@@ -8,11 +10,34 @@ class ManufacturerSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('name', )
 
 
+class AddressSerializer(serializers.Serializer):
+    street = serializers.CharField(source='street.name')
+    city = serializers.CharField(source='street.city.name')
+    house = serializers.CharField()
+    apartment_number = serializers.IntegerField()
+
+    def create(self, validated_data):
+        city, _ = models.City.objects.get_or_create(name=validated_data['street']['city']['name'])
+        street, _ = models.Street.objects.get_or_create(city=city, name=validated_data['street']['name'])
+        return models.Address.objects.get_or_create(street=street,
+                                                    house=validated_data['house'],
+                                                    apartment_number=validated_data['apartment_number'])[0]
+
+
 class CustomerSerializer(serializers.HyperlinkedModelSerializer):
+    address = AddressSerializer()
 
     class Meta:
         model = models.Customer
-        fields = ('first_name', 'last_name', 'second_name', 'address')
+        fields = ('id', 'first_name', 'last_name', 'second_name', 'address')
+
+    def create(self, validated_data):
+        address = AddressSerializer().create(validated_data['address'])
+        del validated_data['address']
+        try:
+            return models.Customer.objects.get(**validated_data)
+        except django.core.exceptions.ObjectDoesNotExist:
+            return models.Customer.objects.create(address=address, **validated_data)
 
 
 class CarBrandSerializer(serializers.HyperlinkedModelSerializer):
