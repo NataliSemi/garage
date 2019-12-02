@@ -23,6 +23,9 @@ class AddressSerializer(serializers.Serializer):
                                                     house=validated_data['house'],
                                                     apartment_number=validated_data['apartment_number'])[0]
 
+    def update(self, instance, validated_data):
+        self.create(validated_data)
+
 
 class CustomerSerializer(serializers.HyperlinkedModelSerializer):
     address = AddressSerializer()
@@ -38,6 +41,17 @@ class CustomerSerializer(serializers.HyperlinkedModelSerializer):
             return models.Customer.objects.get(**validated_data)
         except django.core.exceptions.ObjectDoesNotExist:
             return models.Customer.objects.create(address=address, **validated_data)
+
+    def update(self, instance, validated_data):
+        address = AddressSerializer().create(validated_data['address'])
+        del validated_data['address']
+        try:
+            customer = models.Customer.objects.get(**validated_data)
+        except django.core.exceptions.ObjectDoesNotExist:
+            return models.Customer.objects.create(address=address, **validated_data)
+        customer.address = address
+        customer.save()
+        return customer
 
 
 class CarBrandSerializer(serializers.HyperlinkedModelSerializer):
