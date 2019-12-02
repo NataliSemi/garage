@@ -66,5 +66,5 @@ class Box(models.Model):
 class Customer(models.Model):
     first_name = models.CharField(max_length=50, verbose_name="first name of customer")
     last_name = models.CharField(max_length=50, verbose_name="last name of customer")
-    second_name = models.CharField(max_length=50, verbose_name="second name of customer")
+    second_name = models.CharField(max_length=50, null=True, blank=True, verbose_name="second name of customer")
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
