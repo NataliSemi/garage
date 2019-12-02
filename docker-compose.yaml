@@ -1,0 +1,10 @@
+version: '2'
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: garage
+      POSTGRES_USER: garage
+      POSTGRES_DB: garage
+    ports:
+     - "5432:5432"
