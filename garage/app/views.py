@@ -21,3 +21,8 @@ class CustomerViewSet(viewsets.ModelViewSet):
 class CarBrandViewSet(viewsets.ModelViewSet):
     queryset = models.CarBrand.objects.all()
     serializer_class = serializers.CarBrandSerializer
+
+
+class CarViewSet(viewsets.ModelViewSet):
+    queryset = models.Car.objects.all()
+    serializer_class = serializers.CarSerializer

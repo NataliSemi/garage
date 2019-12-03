@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import RegexValidator
 
 
 class City(models.Model):
@@ -39,11 +40,32 @@ class CarBrand(models.Model):
     class Meta:
         unique_together = ('manufacturer', 'model')
 
+    def __unicode__(self):
+        return f"<CarBrand: {self.manufacturer} {self.model}>"
+
+    def __str__(self):
+        return self.__unicode__()
+
 
 class Car(models.Model):
     brand = models.ForeignKey(CarBrand, on_delete=models.CASCADE)
-    license_plate = models.CharField(max_length=10)
+    license_plate = models.CharField(
+        max_length=10,
+        unique=True,
+        validators=[
+            RegexValidator(
+                regex=r'^[АВЕКМНОРСТУХ]\d{3}(?<!000)[АВЕКМНОРСТУХ]{2}\d{2,3}$',
+                message='License plate is not valid'
+            )
+        ]
+    )
     owner = models.ForeignKey('Customer', on_delete=models.CASCADE)
+
+    def __unicode__(self):
+        return f"<Car: {self.brand} {self.license_plate}>"
+
+    def __str__(self):
+        return self.__unicode__()
 
 
 class Floor(models.Model):
@@ -68,3 +90,9 @@ class Customer(models.Model):
     last_name = models.CharField(max_length=50, verbose_name="last name of customer")
     second_name = models.CharField(max_length=50, null=True, blank=True, verbose_name="second name of customer")
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
+
+    def __unicode__(self):
+        return f"<Customer: {self.first_name} {self.last_name}>"
+
+    def __str__(self):
+        return self.__unicode__()

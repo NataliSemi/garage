@@ -61,3 +61,12 @@ class CarBrandSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.CarBrand
         fields = '__all__'
+
+
+class CarSerializer(serializers.ModelSerializer):
+    brand = CarBrandSerializer()
+
+    class Meta:
+        model = models.Car
+        fields = '__all__'
+
