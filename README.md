@@ -14,6 +14,6 @@ Features
 Used technology
 ---------------
 
-- Django 2.0
+- Django 3.*
 - Django-rest-framework
-- Angular 5.0
+- Vue.js 2.*
