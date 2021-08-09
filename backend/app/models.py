@@ -27,15 +27,15 @@ class Manufacturer(models.Model):
 
 
 class CarBrand(models.Model):
-    manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE)
+    manufacturer = models.ForeignKey('Manufacturer', on_delete=models.CASCADE)
     model = models.CharField(max_length=50)
 
     class Meta:
-        unique_together = ('manufacture', 'model')
+        unique_together = ('manufacturer', 'model')
 
 
 class Car(models.Model):
-    brand = models.ForeignKey(CarBrand, on_delete=models.CASCADE)
+    brand = models.ForeignKey('CarBrand', on_delete=models.CASCADE)
     license_plate = models.CharField(max_length=10)
     owner = models.ForeignKey('Customer', on_delete=models.CASCADE)
 

@@ -28,6 +28,22 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8080',
+    'http://localhost:8081'
+]
+
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,7 +54,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'app'
+    'rest_framework.authtoken',
+    'app',
+
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -118,5 +137,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
+
+
+DEFAULT_AUTO_FIELD='django.db.models.AutoField' 
+
+
 
 STATIC_URL = '/static/'
